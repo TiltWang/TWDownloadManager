@@ -12,7 +12,7 @@
 #import "TWDownloadUtil.h"
 #import "TWDownloadModel.h"
 #import "TWDownloadHUD.h"
-#import <AFNetworking.h>
+ #import <AFNetworking/AFNetworking.h>
 #import "TWNetworkReachability.h"
 
 @interface TWDownloadManager ()<NSURLSessionDelegate, NSURLSessionDownloadDelegate>
