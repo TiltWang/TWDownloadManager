@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "TWDownloadManager"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "TWDownloadManager: A download tool"
 
   # This description is used to generate tags and improve search results.

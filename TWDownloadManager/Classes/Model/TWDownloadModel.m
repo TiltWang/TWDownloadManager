@@ -29,6 +29,7 @@
         _url = [NSString stringWithFormat:@"%@", [resultSet objectForColumn:@"url"]];
         _fileName = [NSString stringWithFormat:@"%@", [resultSet objectForColumn:@"fileName"]];
         _detail = [NSString stringWithFormat:@"%@", [resultSet objectForColumn:@"detail"]];
+        _fileType = [[resultSet objectForColumn:@"fileType"] integerValue];
         _totalFileSize = [[resultSet objectForColumn:@"totalFileSize"] integerValue];
         _tmpFileSize = [[resultSet objectForColumn:@"tmpFileSize"] integerValue];
         _progress = [[resultSet objectForColumn:@"progress"] floatValue];

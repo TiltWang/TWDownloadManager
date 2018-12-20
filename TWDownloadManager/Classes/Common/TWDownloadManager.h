@@ -19,6 +19,9 @@
 // 一次性设置代码 放在APPdelegate.m的didFinishLaunchingWithOptions中
 + (void)appDownloadConfigOnceCode;
 
+///更换数据库保存的名称(就是换数据库) 修改完成后如果在下载页面需要刷新列表
+- (void)changeDBSaveFilePathName:(NSString *)fileName;
+
 // 开始下载
 - (void)startDownloadTask:(TWDownloadModel *)model;
 

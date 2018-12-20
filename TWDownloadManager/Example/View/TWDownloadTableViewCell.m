@@ -99,7 +99,7 @@
     _model = model;
     
     _downloadBtn.model = model;
-    _titleLabel.text = [NSString stringWithFormat:@"%@ : %@", model.fileName, model.detail];// model.fileName;
+    _titleLabel.text = [NSString stringWithFormat:@"%@ : %@ : %@", model.fileName, model.detail, @(model.fileType)];// model.fileName;
     [self updateViewWithModel:model];
 }
 

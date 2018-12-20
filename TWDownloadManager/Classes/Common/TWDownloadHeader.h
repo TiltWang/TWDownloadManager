@@ -17,6 +17,7 @@
 #define TWDownloadAllowsCellularAccessKey                @"TWDownloadAllowsCellularAccessKey"
 #define TWDownloadAllowsCellularAccessChangeNotification @"TWDownloadAllowsCellularAccessChangeNotification"
 #define TWDownloadConfigOnceKey                          @"TWDownloadConfigOnceKey"
+#define TWDownloadDBFileSavePathName                     @"TWDownloadDBFileSavePathName"
 
 /************************* 网络 *************************/
 #define TWNetworkingReachabilityDidChangeNotification    @"TWNetworkingReachabilityDidChangeNotification"
@@ -60,4 +61,13 @@ typedef NS_ENUM(NSInteger, TWDBGetDateOption) {
     TWDBGetDateOptionWaitingModel,          // 第一条等待的数据
     TWDBGetDateOptionLastDownloadingModel,  // 最后一条正在下载的数据
 };
+
+///缓存数据文件类型
+typedef NS_ENUM(NSInteger, TWDownloadFileType) {
+    TWDownloadFileTypeVideo = 0,      // 视频
+    TWDownloadFileTypeDocument,       // 文档
+    TWDownloadFileTypePicture,        // 图片
+    TWDownloadFileTypeOther,          // 其他
+};
+
 #endif /* TWDownloadHeader_h */

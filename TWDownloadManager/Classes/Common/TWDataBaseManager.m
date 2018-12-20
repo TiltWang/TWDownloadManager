@@ -18,6 +18,16 @@
 
 @implementation TWDataBaseManager
 
+- (void)setDbFileName:(NSString *)dbFileName {
+    _dbFileName = dbFileName;
+    if (dbFileName && dbFileName.length > 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:dbFileName forKey:TWDownloadDBFileSavePathName];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [_dbQueue close];
+        [self creatVideoCachesTable];
+    }
+}
+
 + (instancetype)shareManager {
     static TWDataBaseManager *manager = nil;
     
@@ -39,15 +49,21 @@
 
 // 创表
 - (void)creatVideoCachesTable {
+    NSString *fileName = [[NSUserDefaults standardUserDefaults] objectForKey:TWDownloadDBFileSavePathName];
+    [self creatVideoCachesTableWithDbFileName:fileName];
+}
+
+- (void)creatVideoCachesTableWithDbFileName:(NSString *)dbFileName {
+    NSString *tailPath = [NSString stringWithFormat:@"%@.sqlite", dbFileName];
     // 数据库文件路径
-    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"TWDownloadVideoCaches.sqlite"];
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:tailPath];
     
     // 创建队列对象，内部会自动创建一个数据库, 并且自动打开
     _dbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
     
     [_dbQueue inDatabase:^(FMDatabase *db) {
         // 创表
-        BOOL result = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_videoCaches (id integer PRIMARY KEY AUTOINCREMENT, vid text, fileName text, detail text, url text, resumeData blob, totalFileSize integer, tmpFileSize integer, state integer, progress float, lastSpeedTime integer, intervalFileSize integer, lastStateTime integer)"];
+        BOOL result = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS t_videoCaches (id integer PRIMARY KEY AUTOINCREMENT, vid text, fileName text, detail text, url text, fileType integer, resumeData blob, totalFileSize integer, tmpFileSize integer, state integer, progress float, lastSpeedTime integer, intervalFileSize integer, lastStateTime integer)"];
         if (result) {
             //            HWLog(@"视频缓存数据表创建成功");
         }else {
@@ -59,7 +75,7 @@
 // 插入数据
 - (void)insertModel:(TWDownloadModel *)model {
     [_dbQueue inDatabase:^(FMDatabase *db) {
-        BOOL result = [db executeUpdate:@"INSERT INTO t_videoCaches (vid, fileName, detail, url, resumeData, totalFileSize, tmpFileSize, state, progress, lastSpeedTime, intervalFileSize, lastStateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.vid, model.fileName, model.detail, model.url, model.resumeData, [NSNumber numberWithInteger:model.totalFileSize], [NSNumber numberWithInteger:model.tmpFileSize], [NSNumber numberWithInteger:model.state], [NSNumber numberWithFloat:model.progress], [NSNumber numberWithInteger:0], [NSNumber numberWithInteger:0], [NSNumber numberWithInteger:0]];
+        BOOL result = [db executeUpdate:@"INSERT INTO t_videoCaches (vid, fileName, detail, url, fileType, resumeData, totalFileSize, tmpFileSize, state, progress, lastSpeedTime, intervalFileSize, lastStateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.vid, model.fileName, model.detail, model.url, [NSNumber numberWithInteger:model.fileType], model.resumeData, [NSNumber numberWithInteger:model.totalFileSize], [NSNumber numberWithInteger:model.tmpFileSize], [NSNumber numberWithInteger:model.state], [NSNumber numberWithFloat:model.progress], [NSNumber numberWithInteger:0], [NSNumber numberWithInteger:0], [NSNumber numberWithInteger:0]];
         if (result) {
             //            TWDLog(@"插入成功：%@", model.fileName);
         }else {

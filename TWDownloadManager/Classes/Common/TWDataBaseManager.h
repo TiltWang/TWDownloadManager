@@ -11,6 +11,10 @@
 
 @class TWDownloadModel;
 @interface TWDataBaseManager : NSObject
+
+///存储的数据库名称  修改请使用 TWDownloadManager中 changeDBSaveFilePathName: 方法
+@property (nonatomic, strong) NSString *dbFileName;
+
 // 获取单例
 + (instancetype)shareManager;
 

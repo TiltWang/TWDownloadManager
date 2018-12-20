@@ -17,6 +17,7 @@
 @property (nonatomic, copy) NSString *fileName;             // 文件名
 @property (nonatomic, copy) NSString *detail;               // 描述
 @property (nonatomic, copy) NSString *url;                  // url
+@property (nonatomic, assign) TWDownloadFileType fileType;  //文件类型
 @property (nonatomic, strong) NSData *resumeData;           // 下载的数据
 @property (nonatomic, assign) CGFloat progress;             // 下载进度
 @property (nonatomic, assign) TWDownloadState state;        // 下载状态

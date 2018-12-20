@@ -12,7 +12,7 @@
 #import "TWDownloadUtil.h"
 #import "TWDownloadModel.h"
 #import "TWDownloadHUD.h"
- #import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFNetworking.h>
 #import "TWNetworkReachability.h"
 
 @interface TWDownloadManager ()<NSURLSessionDelegate, NSURLSessionDownloadDelegate>
@@ -47,6 +47,7 @@
         // 初始化不允许蜂窝网络下载
         [defaults setBool:NO forKey:TWDownloadAllowsCellularAccessKey];
         [defaults setBool:YES forKey:TWDownloadConfigOnceKey];
+        [defaults setObject:@"TWDownloadVideoCaches" forKey:TWDownloadDBFileSavePathName];
     }
 }
 
@@ -79,6 +80,21 @@
     }
     
     return self;
+}
+
+- (void)changeDBSaveFilePathName:(NSString *)fileName {
+    if (fileName && fileName.length > 0) {
+        NSArray *arr = [[TWDataBaseManager shareManager] getAllUnDownloadedData];
+        if (arr.count > 0) {
+            for (NSInteger i = 0; i < arr.count; i++) {
+                TWDownloadModel *model = arr[i];
+                if (model.state == TWDownloadStateDownloading || model.state == TWDownloadStateWaiting) {
+                    [self pauseDownloadTask:model];
+                }
+            }
+        }
+        [TWDataBaseManager shareManager].dbFileName = fileName;
+    }
 }
 
 // 加入准备下载任务
